@@ -1,19 +1,17 @@
-;; ----------------------------------------------------------
-;; SOLUTION 3: Digit Counter (count-digits)
-;; ----------------------------------------------------------
-;; Accumulator recursion on a single number.
-;; Each step chops the last digit via integer division by 10
-;; and bumps the running $count. Stop when the number hits 0.
+;; ============================================================
+;; CHALLENGE 3: The Digit Counter - Daniel's Solution
+;; ============================================================
 
-;; Integer division by 10: remove the last digit first (subtract
-;; the remainder), THEN divide, so the result stays a whole number.
-(= (div10 $n)
-   (/ (- $n (% $n 10)) 10))
-
+;; Main function: count-digits
+;; Counts digits in a number using accumulator pattern
 (= (count-digits $number $count)
    (if (== $number 0)
-       $count                                  ; base case: nothing left -> return tally
-       (count-digits (div10 $number) (+ $count 1))))  ; chop a digit, count it
+       (if (== $count 0) 
+           1              ; Special case: the number 0 has 1 digit
+           $count)        ; Otherwise return accumulated count
+       (count-digits (/ $number 10) (+ $count 1))))
 
-;; --- test ---
-!(unique (count-digits 90721 0))   ; expected: 5
+;; Tests
+!(count-digits 90721 0)    ; Expected: 5
+!(count-digits 123 0)      ; Expected: 3
+!(count-digits 0 0)        ; Expected: 1
